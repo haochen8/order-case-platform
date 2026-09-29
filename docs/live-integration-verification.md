@@ -37,11 +37,66 @@ H2 and real PostgreSQL. The smoke test now reads queue variants with real tokens
 - Frontend sign-in/sign-out redirect failures now show an error rather than an
   unhandled rejection. Logout no longer puts an ID token in the redirect URL.
 
-## Remaining checks
+## Follow-up edge-case verification — 2026-09-29
 
-Timed token renewal, live expiry recovery, two-tab browser conflicts and mobile
-live-mode layout were not exercised in this run. Conflict and expired-state
-behavior have automated coverage, but that does not replace those browser checks.
+Verified frontend commit `51b2918` against backend `654eb6d` in the real local
+browser. No application code changes were needed. These checks extend the first
+run above; they do not substitute mocked authentication for Keycloak.
+
+### Renewal and expiry recovery
+
+Temporarily set the local web client's access-token lifetime to 90 seconds and
+enabled Keycloak login/logout/refresh event recording. The frontend's existing
+renewal threshold remained 60 seconds before expiry. Keycloak recorded repeated
+successful REFRESH_TOKEN events for case-platform-web while the page and drafts
+remained mounted; subsequent real API reads/writes succeeded without another login.
+
+Revoked the fictional operator sessions using the local admin API. Keycloak then
+recorded REFRESH_TOKEN_ERROR with invalid_token. The application showed its expiry
+warning while keeping the open edit draft. Clicking Save returned the session-expired
+message and kept the input. Signing in again returned to the same case; its title
+and version were unchanged by the expired save attempt, and its audit list contained
+no extra write. The draft is intentionally not persisted across the login redirect:
+the banner tells the user to copy edits before signing in.
+
+Selected Keycloak event evidence (Unix milliseconds, no tokens recorded): successful
+refreshes at 1790688769769 and 1790688799819; failed refreshes after revocation at
+1790688823795 and 1790688829866. Later logins and successful refreshes confirmed
+recovery. Original token lifetime and event configuration were restored after testing.
+
+### Concurrent edits
+
+Opened the same case in two independently authenticated tabs. Both began at version
+zero. Tab B saved a new title; tab A's stale save received “Case changed; reload it
+before retrying” and retained its draft. Reload showed Tab B's current title next to
+Tab A's draft without saving. Only a subsequent explicit Save applied Tab A's title
+and advanced the version to two. The audit history contained the creation and exactly
+the two successful edits.
+
+### Mobile live mode
+
+Verified the actual browser viewport was 390×844, rather than relying on an attempted
+resize. Inspected the edit and closure dialogs; labels, fields and buttons were
+reachable. Created MOBILE_EDGE_CHECK, sent and completed it, then closed its case.
+The order table scrolls horizontally, while the page itself did not overflow the
+viewport. Signed out through Keycloak, signed in as Viewer, and navigated by keyboard
+to the persisted case: no Edit details or New order controls were present.
+
+The fictional case `d4e9db0b-6402-4b4c-a7e2-ebf0ac70b0a9` remains closed in the local
+database with one completed order and seven audit events. Tests did not delete data.
+
+Evidence: [expiry preserves draft](evidence/session-expiry-draft.png),
+[390px edit dialog](evidence/mobile-live-edit.png), and
+[completed mobile workflow](evidence/mobile-live-completed.png).
+
+No source changes were necessary, so the previously verified 69 frontend tests and
+32 backend tests were not rerun for this documentation-only follow-up. Browser
+checks above are newly executed evidence. Temporary servers were stopped and the
+database volume retained.
+
+## Remaining release checks
+
+The requested local renewal, expiry, concurrency and mobile checks are complete.
 No container-image deployment, public hosting, backup/recovery test or production
 identity configuration was verified. Local development accounts are not suitable
 for unrestricted public deployment.

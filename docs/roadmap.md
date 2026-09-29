@@ -14,7 +14,8 @@ contract and architecture. Verification results must be recorded after execution
 Queue, case details, orders, history and operator actions are implemented against
 isolated mocks and reviewed. Core OIDC login and the full operator workflow now
 pass local live verification; see [results and remaining checks](live-integration-verification.md).
-Next: finish renewal/expiry and browser edge-case checks, then deployment preparation.
+Renewal/expiry, two-tab conflicts and 390px live-mode checks also pass.
+Current milestone: deployment preparation and a controlled reviewer demo.
 
 - Lovable frontend in its own Git-synced repository, using the API contract.
 - Case queue, detail, order progression, and history screens.
