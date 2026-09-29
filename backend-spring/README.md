@@ -1,15 +1,15 @@
-# backend-spring
+# Spring Boot backend
 
-Spring Boot backend for case/order management.
+See the [root README](../README.md) for local infrastructure, identity setup,
+architecture, and migration requirements.
 
-## Run locally
-
-```bash
-GRADLE_USER_HOME=../.gradle-home ./gradlew bootRun
-```
-
-## Run tests
+Run PostgreSQL and Keycloak with `docker compose up -d postgres identity` from
+repository root. Then run locally from this directory:
 
 ```bash
-GRADLE_USER_HOME=../.gradle-home ./gradlew test
+SPRING_DATASOURCE_PASSWORD=local-development-only GRADLE_USER_HOME=../.gradle-home ./gradlew bootRun
 ```
+
+Use `./gradlew test` for fast tests, `./gradlew integrationTest` for mandatory
+PostgreSQL tests, and `./gradlew check bootJar` for release verification. Prefix
+with `GRADLE_USER_HOME=../.gradle-home` to use the repository-local cache.

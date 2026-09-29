@@ -11,12 +11,18 @@ import jakarta.persistence.Id;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
+import jakarta.persistence.Version;
 import java.time.Instant;
 import java.util.UUID;
 
 @Entity
 @Table(name = "cases")
 public class Case {
+
+    @Version
+    private Long version;
+
+    public Long getVersion() { return version; }
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)

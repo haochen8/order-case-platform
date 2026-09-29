@@ -10,12 +10,18 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
+import jakarta.persistence.Version;
 import java.time.Instant;
 import java.util.UUID;
 
 @Entity
 @Table(name = "orders")
 public class Order {
+
+    @Version
+    private Long version;
+
+    public Long getVersion() { return version; }
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)

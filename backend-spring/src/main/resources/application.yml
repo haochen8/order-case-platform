@@ -5,11 +5,11 @@ spring:
   datasource:
     url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/casedb}
     username: ${SPRING_DATASOURCE_USERNAME:caseuser}
-    password: ${SPRING_DATASOURCE_PASSWORD:casepass}
+    password: ${SPRING_DATASOURCE_PASSWORD}
   jpa:
     open-in-view: false
     hibernate:
-      ddl-auto: update
+      ddl-auto: validate
     properties:
       hibernate:
         format_sql: true
@@ -20,5 +20,10 @@ management:
       exposure:
         include: health,info
 
-audit:
-  base-url: ${AUDIT_BASE_URL:http://localhost:8081/api}
+app:
+  security:
+    issuer-uri: ${JWT_ISSUER_URI:http://localhost:9090/realms/case-platform}
+    jwk-set-uri: ${JWT_JWK_SET_URI:http://localhost:9090/realms/case-platform/protocol/openid-connect/certs}
+    audience: case-platform-api
+  cors:
+    allowed-origins: ${CORS_ALLOWED_ORIGINS:http://localhost:5173}

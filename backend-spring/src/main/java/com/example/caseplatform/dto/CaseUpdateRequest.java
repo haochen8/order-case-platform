@@ -1,10 +1,21 @@
 package com.example.caseplatform.dto;
 
 import com.example.caseplatform.domain.enums.CaseStatus;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.PositiveOrZero;
 import jakarta.validation.constraints.Size;
 
 public class CaseUpdateRequest {
 
+    @NotNull
+    @PositiveOrZero
+    private Long version;
+
+    public Long getVersion() { return version; }
+    public void setVersion(Long version) { this.version = version; }
+
+    @Pattern(regexp = "(?s).*\\S.*", message = "must not be blank")
     @Size(max = 255)
     private String title;
 

@@ -6,6 +6,11 @@ import java.util.UUID;
 
 public class CaseResponse {
 
+    private Long version;
+
+    public Long getVersion() { return version; }
+    public void setVersion(Long version) { this.version = version; }
+
     private UUID id;
     private String title;
     private String description;

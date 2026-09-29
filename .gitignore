@@ -4,3 +4,8 @@
 
 # Ignore Gradle build output directory
 build
+
+# Local credentials and Python caches
+.env
+__pycache__/
+*.pyc

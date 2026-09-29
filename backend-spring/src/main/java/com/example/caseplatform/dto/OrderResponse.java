@@ -6,6 +6,11 @@ import java.util.UUID;
 
 public class OrderResponse {
 
+    private Long version;
+
+    public Long getVersion() { return version; }
+    public void setVersion(Long version) { this.version = version; }
+
     private UUID id;
     private UUID caseId;
     private String type;

@@ -1,15 +1,16 @@
 package com.example.caseplatform.controller;
 
 import com.example.caseplatform.domain.enums.CaseStatus;
+import com.example.caseplatform.dto.AuditEventResponse;
 import com.example.caseplatform.dto.CaseCreateRequest;
 import com.example.caseplatform.dto.CaseResponse;
 import com.example.caseplatform.dto.CaseUpdateRequest;
+import com.example.caseplatform.service.AuditService;
 import com.example.caseplatform.service.CaseService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
-import java.util.List;
-import java.util.Map;
+import java.security.Principal;
 import java.util.UUID;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -24,7 +25,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -36,7 +36,10 @@ public class CaseController {
 
     private final CaseService caseService;
 
-    public CaseController(CaseService caseService) {
+    private final AuditService audit;
+
+    public CaseController(CaseService caseService, AuditService audit) {
+        this.audit = audit;
         this.caseService = caseService;
     }
 
@@ -46,7 +49,7 @@ public class CaseController {
             @RequestParam(defaultValue = "20") @Min(1) @Max(200) int size,
             @RequestParam(required = false) CaseStatus status,
             @RequestParam(required = false) String search) {
-        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt"));
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt", "id"));
         return caseService.getCases(status, search, pageable);
     }
 
@@ -58,8 +61,8 @@ public class CaseController {
     @PostMapping
     public ResponseEntity<CaseResponse> createCase(
             @Valid @RequestBody CaseCreateRequest request,
-            @RequestHeader(name = "X-Actor", defaultValue = "system") String actor) {
-        CaseResponse created = caseService.createCase(request, actor);
+            Principal principal) {
+        CaseResponse created = caseService.createCase(request, principal.getName());
         return ResponseEntity.status(HttpStatus.CREATED).body(created);
     }
 
@@ -67,20 +70,23 @@ public class CaseController {
     public CaseResponse updateCase(
             @PathVariable UUID id,
             @Valid @RequestBody CaseUpdateRequest request,
-            @RequestHeader(name = "X-Actor", defaultValue = "system") String actor) {
-        return caseService.updateCase(id, request, actor);
+            Principal principal) {
+        return caseService.updateCase(id, request, principal.getName());
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteCase(
             @PathVariable UUID id,
-            @RequestHeader(name = "X-Actor", defaultValue = "system") String actor) {
-        caseService.deleteCase(id, actor);
+            @RequestParam @Min(0) Long version,
+            Principal principal) {
+        caseService.deleteCase(id, version, principal.getName());
         return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/{id}/audit")
-    public List<Map<String, Object>> getCaseAudit(@PathVariable UUID id) {
-        return caseService.getCaseAudit(id);
+    public Page<AuditEventResponse> getCaseAudit(@PathVariable UUID id,
+            @RequestParam(defaultValue = "0") @Min(0) int page,
+            @RequestParam(defaultValue = "20") @Min(1) @Max(200) int size) {
+        return audit.history(id, PageRequest.of(page, size, Sort.by("occurredAt", "id")));
     }
 }
