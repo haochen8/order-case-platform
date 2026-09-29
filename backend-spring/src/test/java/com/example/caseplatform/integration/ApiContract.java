@@ -67,6 +67,17 @@ abstract class ApiContract {
     }
 
     @Test
+    void queueSupportsMissingBlankAndPopulatedSearch() throws Exception {
+        createCase();
+        for (String suffix : new String[] {"", "?search=", "?status=OPEN", "?search=FIBER"}) {
+            mvc.perform(get("/api/cases" + suffix).with(viewer()))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.totalElements").value(1))
+                    .andExpect(jsonPath("$.content[0].title").value("Install fiber"));
+        }
+    }
+
+    @Test
     void anonymousAndViewerCannotWrite() throws Exception {
         mvc.perform(get("/api/cases")).andExpect(status().isUnauthorized());
         mvc.perform(post("/api/cases").with(viewer()).contentType(MediaType.APPLICATION_JSON)

@@ -12,9 +12,9 @@ contract and architecture. Verification results must be recorded after execution
 ## 2. Frontend and demo
 
 Queue, case details, orders, history and operator actions are implemented against
-isolated mocks and reviewed. Current milestone: real OIDC login and API integration;
-see [the integration handoff](lovable-auth-integration.md). Mock tests do not prove
-real authentication, PostgreSQL persistence or live end-to-end behavior.
+isolated mocks and reviewed. Core OIDC login and the full operator workflow now
+pass local live verification; see [results and remaining checks](live-integration-verification.md).
+Next: finish renewal/expiry and browser edge-case checks, then deployment preparation.
 
 - Lovable frontend in its own Git-synced repository, using the API contract.
 - Case queue, detail, order progression, and history screens.

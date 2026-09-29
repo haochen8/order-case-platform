@@ -41,6 +41,9 @@ def main():
     request('GET', '/actuator/health')
     request('GET', '/api/cases', expected=401)
     request('GET', '/api/cases', 'invalid-token', expected=401)
+    request('GET', '/api/cases', viewer)
+    request('GET', '/api/cases?status=OPEN', viewer)
+    request('GET', '/api/cases?search=fiber', viewer)
     request('POST', '/api/cases', viewer, {'title': 'Forbidden'}, expected=403)
     case = request('POST', '/api/cases', operator,
                    {'title': 'Smoke test: fiber installation'}, expected=201)

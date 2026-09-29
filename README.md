@@ -3,8 +3,10 @@
 A service fulfillment application built with Java 17, Spring Boot, and PostgreSQL.
 Operators open customer cases, create provisioning orders, progress their work,
 and close the case with an attributable activity history. Viewers have read-only
-access. The frontend and public portfolio demo are planned; this repository
-currently implements the backend foundation.
+access. The [frontend](https://github.com/haochen8/frontend-order-case-platform)
+is implemented, and its core workflow has been verified locally against Keycloak,
+Spring and PostgreSQL. See [live integration results](docs/live-integration-verification.md).
+Public deployment remains planned.
 
 ## Run locally
 
@@ -65,7 +67,7 @@ runs `check bootJar` on pushes and pull requests and retains test reports.
 
 ```mermaid
 flowchart LR
-    UI[Planned Lovable frontend] -->|Bearer token + REST| API[Spring Boot API]
+    UI[Lovable frontend] -->|Bearer token + REST| API[Spring Boot API]
     UI -->|Authorization Code + PKCE| ID[OIDC identity provider]
     API -->|Verify JWT signature, issuer, audience, expiry| ID
     API --> S[Transactional services]
@@ -101,6 +103,6 @@ stable subject, an expiration, and a top-level `roles` array containing `VIEWER`
 or `OPERATOR`. Use HTTPS and a properly operated OIDC provider; the development
 realm is not a production identity setup. An empty roles list grants no access.
 
-Before public release: finish the frontend, browser tests, demo seed/reset
+Before public release: finish remaining browser acceptance, demo seed/reset
 strategy, hosted identity setup, dependency/image scanning, and deployment smoke
 checks. This repository does not claim those milestones are complete.

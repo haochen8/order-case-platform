@@ -60,3 +60,14 @@ Fixed the page to retain loaded content and drafts on refetch failure, visibly d
 Final checks: **45 tests passed across seven files, TypeScript passed, production build passed, lint zero errors/six existing warnings, diff whitespace check passed**. No independent browser/mobile session was run for this review. Real login, live API persistence and deployment are not yet verified.
 
 Next handoff: [real login and API integration readiness](lovable-auth-integration.md). The hosted preview cannot establish local Spring/Keycloak acceptance; that will be tested locally after the authentication code is ready.
+
+## Authentication and live acceptance review
+
+Reviewed a3f2440 and independently verified its 67 tests, TypeScript and build.
+The live local browser run uncovered a PostgreSQL queue failure with an omitted
+search, fixed in the backend with regression coverage. The full operator lifecycle,
+persistence after reload, Viewer UI and provider logout then passed. Added frontend
+handling/tests for failed login/logout redirects and removed ID tokens from logout
+URLs. Final frontend suite: 69 passing tests, lint zero errors/six stock warnings,
+TypeScript/build passed. See [live integration results](live-integration-verification.md)
+for evidence and explicit limits, including renewal not yet verified live.

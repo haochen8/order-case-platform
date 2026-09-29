@@ -23,9 +23,9 @@ public interface CaseRepository extends JpaRepository<Case, UUID> {
             SELECT c FROM Case c
             WHERE (:status IS NULL OR c.status = :status)
               AND (
-                :search IS NULL
-                OR LOWER(c.title) LIKE LOWER(CONCAT('%', :search, '%'))
-                OR LOWER(COALESCE(c.description, '')) LIKE LOWER(CONCAT('%', :search, '%'))
+                CAST(:search AS string) IS NULL
+                OR LOWER(c.title) LIKE LOWER(CONCAT('%', CAST(:search AS string), '%'))
+                OR LOWER(COALESCE(c.description, '')) LIKE LOWER(CONCAT('%', CAST(:search AS string), '%'))
               )
             """)
     Page<Case> findByFilters(
