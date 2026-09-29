@@ -1,0 +1,22 @@
+{
+	email {$ACME_EMAIL}
+}
+{$API_HOST} {
+	@public path /api/* /actuator/health
+	handle @public {
+		reverse_proxy api:8080
+	}
+	handle {
+		respond "Not found" 404
+	}
+}
+{$AUTH_HOST} {
+	# Login/discovery and static assets only. Admin/management stay private.
+	@public path /realms/case-platform/* /resources/* /.well-known/*
+	handle @public {
+		reverse_proxy identity:8080
+	}
+	handle {
+		respond "Not found" 404
+	}
+}

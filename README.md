@@ -103,6 +103,8 @@ stable subject, an expiration, and a top-level `roles` array containing `VIEWER`
 or `OPERATOR`. Use HTTPS and a properly operated OIDC provider; the development
 realm is not a production identity setup. An empty roles list grants no access.
 
-Before public release: finish remaining browser acceptance, demo seed/reset
-strategy, hosted identity setup, dependency/image scanning, and deployment smoke
-checks. This repository does not claim those milestones are complete.
+A portable release configuration, private input generator, backup script and
+step-by-step [deployment runbook](docs/deployment.md) are now available. These use
+production Keycloak with persistent identity storage and HTTPS ingress. Public
+deployment, hosted smoke checks, image scanning and the demo data policy remain
+release gates; no public environment is claimed to be live.

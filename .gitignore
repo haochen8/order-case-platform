@@ -9,3 +9,7 @@ build
 .env
 __pycache__/
 *.pyc
+.env.*
+!.env.example
+deploy/generated/
+backups/
