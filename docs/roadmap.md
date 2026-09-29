@@ -1,6 +1,6 @@
 # Delivery roadmap
 
-## 1. Backend foundation (current milestone)
+## 1. Backend foundation
 
 Implemented and verified locally; see [verification results](verification.md).
 
@@ -10,6 +10,11 @@ local infrastructure; fast and PostgreSQL verification; executable JAR; document
 contract and architecture. Verification results must be recorded after execution.
 
 ## 2. Frontend and demo
+
+Queue, case details, orders, history and operator actions are implemented against
+isolated mocks and reviewed. Current milestone: real OIDC login and API integration;
+see [the integration handoff](lovable-auth-integration.md). Mock tests do not prove
+real authentication, PostgreSQL persistence or live end-to-end behavior.
 
 - Lovable frontend in its own Git-synced repository, using the API contract.
 - Case queue, detail, order progression, and history screens.

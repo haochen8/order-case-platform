@@ -48,3 +48,15 @@ Found an integration mismatch: summaries and fixtures used CASE_STATUS_CHANGED/O
 Corrected these in frontend commit `0e4fad3` and pushed to main. Added coverage for real audit payloads and fixture replay checks for legal transitions, versions and case closure. Case 1 now has 48 events, still three pages. After the fix: **28 tests passed, TypeScript passed, production build passed, lint zero errors/six existing UI warnings**. Vitest ran under native Node and the build used Bun. No deployed environment was tested.
 
 Next milestone: [case and order actions](lovable-workflow-actions.md), with conflict handling and mock workflow coverage. Authentication and real integration follow that milestone.
+
+## Operator-action review
+
+Reviewed Lovable main `756a190` on 2026-09-29. All 44 reported tests, TypeScript and the production build passed independently. Lint reported zero errors and six existing stock UI warnings. API methods and transition controls match the intended operator workflow; mock mode remains a development simulation.
+
+Found and reproduced a draft-loss bug: after a version conflict, a failed “Reload latest case” refetch replaced the case body with the full error state and unmounted the edit dialog. React Query can also return cached data alongside the refetch error, which must not be treated as a newly reviewed version.
+
+Fixed the page to retain loaded content and drafts on refetch failure, visibly disclose stale data, and accept a refreshed version only on success. Failed reloads keep the error/retry path instead of clearing it. Added a regression test that fails before the fix and verifies draft retention, no automatic write, and a subsequent successful reload.
+
+Final checks: **45 tests passed across seven files, TypeScript passed, production build passed, lint zero errors/six existing warnings, diff whitespace check passed**. No independent browser/mobile session was run for this review. Real login, live API persistence and deployment are not yet verified.
+
+Next handoff: [real login and API integration readiness](lovable-auth-integration.md). The hosted preview cannot establish local Spring/Keycloak acceptance; that will be tested locally after the authentication code is ready.
