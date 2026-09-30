@@ -6,7 +6,15 @@ and close the case with an attributable activity history. Viewers have read-only
 access. The [frontend](https://github.com/haochen8/frontend-order-case-platform)
 is implemented, and its core workflow has been verified locally against Keycloak,
 Spring and PostgreSQL. See [live integration results](docs/live-integration-verification.md).
-Public deployment remains planned.
+Public backend deployment remains planned.
+
+## Try the frontend demo
+
+**[Open the interactive demo](https://order-case-platform.lovable.app/)**
+
+The Lovable-hosted frontend runs with fictional mock data in your browser.
+Changes reset on reload, and the demo role switch simulates Operator and Viewer
+access. This demo does not connect to the Spring Boot backend or use real sign-in.
 
 ## Screenshots and verification evidence
 
