@@ -17,7 +17,7 @@ not a public deployment or an enterprise identity-provider integration.
 - After the review fix, provider logout uses client_id and confirmation without
   id_token_hint in its URL, then returns to the application sign-in screen.
 
-Evidence: [closed case and audit history](evidence/local-live-workflow.png).
+Evidence: [closed case and audit history](evidence/local-live-workflow.jpg).
 The fictional browser case is 08721e77-2219-48bf-bea7-52e8a6a3fbcd. It remains
 in the local development database. A separate smoke-test case was also created.
 
@@ -85,9 +85,9 @@ to the persisted case: no Edit details or New order controls were present.
 The fictional case `d4e9db0b-6402-4b4c-a7e2-ebf0ac70b0a9` remains closed in the local
 database with one completed order and seven audit events. Tests did not delete data.
 
-Evidence: [expiry preserves draft](evidence/session-expiry-draft.png),
-[390px edit dialog](evidence/mobile-live-edit.png), and
-[completed mobile workflow](evidence/mobile-live-completed.png).
+Evidence: [expiry preserves draft](evidence/session-expiry-draft.jpg),
+[390px edit dialog](evidence/mobile-live-edit.jpg), and
+[completed mobile workflow](evidence/mobile-live-completed.jpg).
 
 No source changes were necessary, so the previously verified 69 frontend tests and
 32 backend tests were not rerun for this documentation-only follow-up. Browser

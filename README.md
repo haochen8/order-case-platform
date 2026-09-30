@@ -8,6 +8,59 @@ is implemented, and its core workflow has been verified locally against Keycloak
 Spring and PostgreSQL. See [live integration results](docs/live-integration-verification.md).
 Public deployment remains planned.
 
+## Screenshots and verification evidence
+
+Captured on **2026-09-29** with the frontend connected to **Spring Boot,
+PostgreSQL and Keycloak**, with mocks disabled. The records are fictional test
+data. These screenshots document local integration checks, not a public backend
+deployment. The browser-only mock demo runs separately from this backend.
+
+### Completed case, order and activity history
+
+The operator completed a provisioning order and closed its case. The activity
+list shows case creation, order creation, order progression and case closure.
+The same records remained available after reloading the page during verification.
+
+![Locally verified case marked Closed, provisioning order marked Completed, and five activity events](docs/evidence/local-live-workflow.jpg)
+
+<details>
+<summary><strong>Session expiry: unsaved draft remains visible</strong></summary>
+
+After the operator session was revoked, saving showed a session-expired error
+while retaining the draft in the open form. The user must copy unsaved edits
+before signing in again; drafts do not survive the login redirect.
+
+![Session-expired warning and edit dialog retaining the unsaved title and description](docs/evidence/session-expiry-draft.jpg)
+
+</details>
+
+<details>
+<summary><strong>Mobile: edit form at a 390px viewport</strong></summary>
+
+The edit dialog keeps its labelled fields and Save/Cancel buttons accessible
+at the verified mobile viewport.
+
+<img src="docs/evidence/mobile-live-edit.jpg" alt="Mobile edit dialog with title, description, Save changes and Cancel controls" width="390">
+
+</details>
+
+<details>
+<summary><strong>Mobile: completed workflow and activity history</strong></summary>
+
+The mobile workflow finished with a completed order and closed case. The activity
+list records the order transitions and closure; the orders table scrolls
+horizontally on narrow screens.
+
+<img src="docs/evidence/mobile-live-completed.jpg" alt="Mobile case page showing a closed case and the activity history of its completed provisioning order" width="390">
+
+</details>
+
+See the [full integration verification record](docs/live-integration-verification.md)
+for authentication, persistence, permissions and concurrent-edit checks, and the
+[deployment verification record](docs/deployment-verification.md) for container
+and backup/restore checks. The recorded backend run passed **32 tests** with no
+failures or skips.
+
 ## Run locally
 
 Requires Docker Compose. From the repository root:
